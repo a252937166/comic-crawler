@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ouyanglol.crawler.dao.ComicChapterDAO">
+  <resultMap id="BaseResultMap" type="com.ouyanglol.crawler.model.ComicChapter">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="basic_id" jdbcType="INTEGER" property="basicId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="chapter_no" jdbcType="INTEGER" property="chapterNo" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="origin_name" jdbcType="VARCHAR" property="originName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="crawler_status" jdbcType="BIT" property="crawlerStatus" />
+    <result column="new_flag" jdbcType="BIT" property="newFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, basic_id, `name`, chapter_no, `status`, origin_name, create_date, update_date, 
+    crawler_status, new_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from comic_chapter
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from comic_chapter
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicChapter" useGeneratedKeys="true">
+    insert into comic_chapter (basic_id, `name`, chapter_no, 
+      `status`, origin_name, create_date, 
+      update_date, crawler_status, new_flag
+      )
+    values (#{basicId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{chapterNo,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{originName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{crawlerStatus,jdbcType=BIT}, #{newFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicChapter" useGeneratedKeys="true">
+    insert into comic_chapter
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="basicId != null">
+        basic_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="chapterNo != null">
+        chapter_no,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="originName != null">
+        origin_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="crawlerStatus != null">
+        crawler_status,
+      </if>
+      <if test="newFlag != null">
+        new_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="basicId != null">
+        #{basicId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="chapterNo != null">
+        #{chapterNo,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="originName != null">
+        #{originName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="crawlerStatus != null">
+        #{crawlerStatus,jdbcType=BIT},
+      </if>
+      <if test="newFlag != null">
+        #{newFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ouyanglol.crawler.model.ComicChapter">
+    update comic_chapter
+    <set>
+      <if test="basicId != null">
+        basic_id = #{basicId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="chapterNo != null">
+        chapter_no = #{chapterNo,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="originName != null">
+        origin_name = #{originName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="crawlerStatus != null">
+        crawler_status = #{crawlerStatus,jdbcType=BIT},
+      </if>
+      <if test="newFlag != null">
+        new_flag = #{newFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ouyanglol.crawler.model.ComicChapter">
+    update comic_chapter
+    set basic_id = #{basicId,jdbcType=INTEGER},
+      `name` = #{name,jdbcType=VARCHAR},
+      chapter_no = #{chapterNo,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      origin_name = #{originName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      crawler_status = #{crawlerStatus,jdbcType=BIT},
+      new_flag = #{newFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
