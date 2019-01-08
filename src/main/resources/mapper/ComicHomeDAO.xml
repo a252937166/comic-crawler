@@ -5,9 +5,10 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, `name`, url
+    id, `name`, url, status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -15,13 +16,25 @@
     from comic_home
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="queryByNameAndStatus" resultType="com.ouyanglol.crawler.model.ComicHome">
+    select
+    <include refid="Base_Column_List" />
+    from comic_home
+    where 1=1
+    <if test="name != null">
+      AND `name` LIKE  CONCAT('%',#{name},'%')
+    </if>
+    <if test="status != null">
+      AND status = #{status,jdbcType=INTEGER},
+    </if>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from comic_home
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicHome" useGeneratedKeys="true">
-    insert into comic_home (`name`, url)
-    values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR})
+    insert into comic_home (`name`, url,status)
+    values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicHome" useGeneratedKeys="true">
     insert into comic_home
@@ -32,6 +45,9 @@
       <if test="url != null">
         url,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -39,6 +55,9 @@
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -51,13 +70,16 @@
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        url = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ouyanglol.crawler.model.ComicHome">
     update comic_home
     set `name` = #{name,jdbcType=VARCHAR},
-      url = #{url,jdbcType=VARCHAR}
+      url = #{url,jdbcType=VARCHAR},status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
  * @param <Model> The Model Class 这里是泛型不是Model类
  * @param <PK> The Primary Key Class 如果是无主键，则可以用Model来跳过，如果是多主键则是Key类
  */
-public interface MyBatisBaseDao<Model, PK extends Serializable> {
+public interface MyBatisBaseDAO<Model, PK extends Serializable> {
     int deleteByPrimaryKey(PK id);
 
     int insert(Model record);

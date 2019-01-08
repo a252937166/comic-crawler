@@ -5,5 +5,5 @@ import com.ouyanglol.crawler.model.ComicContent;
 /**
  * ComicContentDAO继承基类
  */
-public interface ComicContentDAO extends MyBatisBaseDao<ComicContent, Integer> {
+public interface ComicContentDAO extends MyBatisBaseDAO<ComicContent, Integer> {
 }
