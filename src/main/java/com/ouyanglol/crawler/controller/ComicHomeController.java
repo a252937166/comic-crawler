@@ -24,7 +24,7 @@ public class ComicHomeController {
     @Autowired
     private ComicHomeService comicHomeService;
 
-    @GetMapping("/page")
+    @GetMapping("page")
     @ApiOperation("分页获取漫画详情地址")
     public Result<PageInfo<ComicHomeVO>> page(ComicHomePageRequest request) {
         PageInfo<ComicHomeVO> pageInfo = comicHomeService.getPage(request.getPage(),request.getPageSize(),request.getName(),request.getStatus());
