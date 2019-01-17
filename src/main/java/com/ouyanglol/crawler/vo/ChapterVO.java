@@ -1,16 +1,14 @@
-package com.ouyanglol.crawler.model;
+package com.ouyanglol.crawler.vo;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Date;
 
-/**
- * comic_chapter
- * @author 
- */
-
 @Data
-public class ComicChapter {
+@ApiModel("漫画章节")
+public class ChapterVO {
+
     private Integer id;
 
     private Integer basicId;

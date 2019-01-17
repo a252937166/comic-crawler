@@ -1,15 +1,14 @@
-package com.ouyanglol.crawler.model;
+package com.ouyanglol.crawler.vo;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Date;
 
-/**
- * comic_basic
- * @author 
- */
 @Data
-public class ComicBasic {
+@ApiModel("漫画基本信息")
+public class ComicBasicVO {
+
     private Integer id;
 
     /**
@@ -56,5 +55,4 @@ public class ComicBasic {
     private Integer areaId;
 
     private String crawlerUrl;
-
 }

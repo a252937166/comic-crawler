@@ -2,14 +2,8 @@ package com.ouyanglol.crawler;
 
 import com.ouyanglol.crawler.config.mq.MqComicProducer;
 import com.ouyanglol.crawler.entity.ComicUrl;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.ouyanglol.crawler.model.ComicHome;
-import com.ouyanglol.crawler.service.ComicHomeService;
+import com.ouyanglol.crawler.model.ComicBasic;
+import com.ouyanglol.crawler.service.ComicBasicService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,6 +13,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Ouyang
@@ -31,8 +31,9 @@ public class MyTest {
     @Autowired
     private MqComicProducer producer;
 
+
     @Autowired
-    private ComicHomeService comicHomeService;
+    private ComicBasicService comicBasicService;
 
 
     private void getImg(String s) throws IOException {
@@ -104,10 +105,10 @@ public class MyTest {
             if (e.childNode(0) instanceof TextNode) {
                 String comicName = e.childNode(0).toString();
                 String url = "https://manhua.fzdm.com/"+e.attributes().get("href");
-                ComicHome comicHome = new ComicHome();
-                comicHome.setName(comicName);
-                comicHome.setUrl(url);
-                comicHomeService.add(comicHome);
+                ComicBasic comicBasic = new ComicBasic();
+                comicBasic.setName(comicName);
+                comicBasic.setCrawlerUrl(url);
+                comicBasicService.add(comicBasic);
                 System.out.println(e.childNode(0).toString()+":https://manhua.fzdm.com/"+e.attributes().get("href"));
             }
         });

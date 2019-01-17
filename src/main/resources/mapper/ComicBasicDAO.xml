@@ -14,16 +14,29 @@
     <result column="cover" jdbcType="VARCHAR" property="cover" />
     <result column="type_id" jdbcType="INTEGER" property="typeId" />
     <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="crawler_url" jdbcType="VARCHAR" property="crawlerUrl" />
   </resultMap>
   <sql id="Base_Column_List">
     id, `name`, author, check_num, serialize_status, create_date, update_date, `status`, 
-    introduction, cover, type_id, area_id
+    introduction, cover, type_id, area_id,crawler_url
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from comic_basic
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="queryByNameAndStatus" resultType="com.ouyanglol.crawler.model.ComicBasic">
+    select
+    <include refid="Base_Column_List" />
+    from comic_basic
+    where 1=1
+    <if test="name != null">
+      AND `name` LIKE  CONCAT('%',#{name},'%')
+    </if>
+    <if test="status != null">
+      AND status = #{status,jdbcType=INTEGER},
+    </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from comic_basic
@@ -33,11 +46,11 @@
     insert into comic_basic (`name`, author, check_num, 
       serialize_status, create_date, update_date, 
       `status`, introduction, cover, 
-      type_id, area_id)
+      type_id, area_id,crawler_url)
     values (#{name,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{checkNum,jdbcType=INTEGER}, 
       #{serializeStatus,jdbcType=TINYINT}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER}, #{introduction,jdbcType=VARCHAR}, #{cover,jdbcType=VARCHAR}, 
-      #{typeId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER})
+      #{typeId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER},#{crawlerUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicBasic" useGeneratedKeys="true">
     insert into comic_basic
@@ -75,6 +88,9 @@
       <if test="areaId != null">
         area_id,
       </if>
+      <if test="crawlerUrl != null">
+        crawler_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -109,6 +125,9 @@
       </if>
       <if test="areaId != null">
         #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="crawlerUrl != null">
+        #{crawlerUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -148,6 +167,9 @@
       <if test="areaId != null">
         area_id = #{areaId,jdbcType=INTEGER},
       </if>
+      <if test="crawlerUrl != null">
+        crawler_url = #{crawlerUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -163,7 +185,8 @@
       introduction = #{introduction,jdbcType=VARCHAR},
       cover = #{cover,jdbcType=VARCHAR},
       type_id = #{typeId,jdbcType=INTEGER},
-      area_id = #{areaId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
+      area_id = #{areaId,jdbcType=INTEGER},
+      crawler_url = #{areaId,jdbcType=INTEGER},
+    where id = #{crawlerUrl,jdbcType=VARCHAR}
   </update>
 </mapper>
