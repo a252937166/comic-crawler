@@ -7,21 +7,32 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.ouyanglol.crawler.model.ComicHome;
+import com.ouyanglol.crawler.service.ComicHomeService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author Ouyang
  * @date 18/12/23 15:10
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class MyTest {
 
     @Autowired
     private MqComicProducer producer;
+
+    @Autowired
+    private ComicHomeService comicHomeService;
 
 
     private void getImg(String s) throws IOException {
@@ -85,14 +96,22 @@ public class MyTest {
 
     @Test
     public void getAll() throws IOException {
+        System.out.println(111111);
         Document doc = Jsoup.connect("https://manhua.fzdm.com/").get();
         Element element = doc.getElementById("mhmain");
         List<Element> list = element.getElementsByTag("a");
         list.forEach(e->{
             if (e.childNode(0) instanceof TextNode) {
+                String comicName = e.childNode(0).toString();
+                String url = "https://manhua.fzdm.com/"+e.attributes().get("href");
+                ComicHome comicHome = new ComicHome();
+                comicHome.setName(comicName);
+                comicHome.setUrl(url);
+                comicHomeService.add(comicHome);
                 System.out.println(e.childNode(0).toString()+":https://manhua.fzdm.com/"+e.attributes().get("href"));
             }
         });
+        System.out.println(111111111);
     }
 
 

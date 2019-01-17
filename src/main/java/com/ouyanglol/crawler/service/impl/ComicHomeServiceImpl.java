@@ -38,4 +38,9 @@ public class ComicHomeServiceImpl implements ComicHomeService {
         pageInfo.setList(voList);
         return pageInfo;
     }
+
+    @Override
+    public Integer add(ComicHome comicHome) {
+        return comicHomeDAO.insertSelective(comicHome);
+    }
 }
