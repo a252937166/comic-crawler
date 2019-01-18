@@ -26,7 +26,7 @@
     from comic_basic
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="queryByNameAndStatus" resultType="com.ouyanglol.crawler.model.ComicBasic">
+  <select id="queryByNameAndStatus" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from comic_basic

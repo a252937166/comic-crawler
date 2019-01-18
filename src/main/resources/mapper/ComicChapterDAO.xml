@@ -10,8 +10,8 @@
     <result column="origin_name" jdbcType="VARCHAR" property="originName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="crawler_status" jdbcType="BIT" property="crawlerStatus" />
-    <result column="new_flag" jdbcType="BIT" property="newFlag" />
+    <result column="crawler_status" jdbcType="INTEGER" property="crawlerStatus" />
+    <result column="new_flag" jdbcType="INTEGER" property="newFlag" />
   </resultMap>
   <sql id="Base_Column_List">
     id, basic_id, `name`, chapter_no, `status`, origin_name, create_date, update_date, 
@@ -23,7 +23,38 @@
     from comic_chapter
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+    <select id="queryByNameAndCrawlerStatus" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from comic_chapter
+      where `status` = 1
+      <if test="basicId != null">
+        basic_id = #{basicId,jdbcType=INTEGER}
+      </if>
+      <if test="keyWord != null">
+        `name` LIKE CONCAT('%',#{keyWord,jdbcType=VARCHAR} ,'%' )
+      </if>
+      <if test="crawlerStatus != null">
+        crawlerStatus = #{crawlerStatus,jdbcType=INTEGER}
+      </if>
+      union
+      select
+      <include refid="Base_Column_List" />
+      from comic_chapter
+      where `status` = 1
+      <if test="basicId != null">
+        basic_id = #{basicId,jdbcType=INTEGER}
+      </if>
+      <if test="keyWord != null">
+        origin_name LIKE CONCAT('%',#{keyWord,jdbcType=VARCHAR} ,'%' )
+      </if>
+      <if test="crawlerStatus != null">
+        crawlerStatus = #{crawlerStatus,jdbcType=INTEGER}
+      </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from comic_chapter
     where id = #{id,jdbcType=INTEGER}
   </delete>
