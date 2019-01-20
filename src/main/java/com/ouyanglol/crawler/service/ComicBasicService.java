@@ -25,4 +25,11 @@ public interface ComicBasicService {
      * @return
      */
     Integer add(ComicBasic comicBasic);
+
+    /**
+     * 根据id查找
+     * @param basicId basicId
+     * @return
+     */
+    ComicBasic queryById(Integer basicId);
 }

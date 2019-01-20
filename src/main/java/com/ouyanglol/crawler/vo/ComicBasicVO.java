@@ -13,7 +13,7 @@ import java.util.Date;
 @ApiModel("漫画基本信息")
 public class ComicBasicVO {
 
-    @ApiModelProperty("id")
+    @ApiModelProperty(value = "id",example = "1")
     private Integer id;
 
     @ApiModelProperty("漫画名")
@@ -22,11 +22,11 @@ public class ComicBasicVO {
     @ApiModelProperty("作者")
     private String author;
 
-    @ApiModelProperty("点击量")
+    @ApiModelProperty(value = "点击量",example = "1")
     private Integer checkNum;
 
-    @ApiModelProperty("连载状态")
-    private Byte serializeStatus;
+    @ApiModelProperty(value = "连载状态",example = "1")
+    private Integer serializeStatus;
 
     @ApiModelProperty("创建时间")
     private Date createDate;
@@ -34,7 +34,7 @@ public class ComicBasicVO {
     @ApiModelProperty("更新时间")
     private Date updateDate;
 
-    @ApiModelProperty("状态")
+    @ApiModelProperty(value = "状态",example = "1")
     private Integer status;
 
     @ApiModelProperty("简介")
@@ -43,10 +43,10 @@ public class ComicBasicVO {
     @ApiModelProperty("封面")
     private String cover;
 
-    @ApiModelProperty("类别id")
+    @ApiModelProperty(value = "类别id",example = "1")
     private Integer typeId;
 
-    @ApiModelProperty("地区id")
+    @ApiModelProperty(value = "地区id",example = "1")
     private Integer areaId;
 
     @ApiModelProperty("爬虫网址")

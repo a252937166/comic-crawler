@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * ComicBasicDAO继承基类
+ * @author dnouyang
  */
 public interface ComicBasicDAO extends MyBatisBaseDAO<ComicBasic, Integer> {
 

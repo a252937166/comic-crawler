@@ -9,10 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -24,8 +21,8 @@ import java.util.regex.Pattern;
  * @author Ouyang
  * @date 18/12/23 15:10
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class MyTest {
 
     @Autowired
@@ -37,7 +34,7 @@ public class MyTest {
 
 
     private void getImg(String s) throws IOException {
-        String pattern = "var\\s+mhurl\\s*=\\s*\"(.*?)(\";){1}";
+        String pattern = "var\\s+mhurl\\s*=\\s*\"(.*?)\";";
         Pattern r = Pattern.compile(pattern);
         String pattern2 = "<a\\s+href=\"(.*?)\"\\s+class=\"pure-button pure-button-primary\">下一页</a>";
         Pattern r2 = Pattern.compile(pattern2);
@@ -130,5 +127,16 @@ public class MyTest {
                 System.out.println("+++++++++++++++++++++++++++++++++++++++++++");
             }
         });
+    }
+
+    @Test
+    public void chapterName() {
+        String pattern = "月咏[\\u4e00-\\u9fa5_a-zA-Z]*([0-9]+)(卷|章)";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher("月咏第1112卷");
+        if (m.find()) {
+            String chapterNum = m.group(1);
+            System.out.println(chapterNum);
+        }
     }
 }

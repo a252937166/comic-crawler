@@ -30,7 +30,7 @@ public class ComicBasic {
     /**
      * 连载状态 1未完结 -1完结
      */
-    private Byte serializeStatus;
+    private Integer serializeStatus;
 
     private Date createDate;
 

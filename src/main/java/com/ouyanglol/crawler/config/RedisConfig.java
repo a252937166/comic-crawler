@@ -1,7 +1,6 @@
 package com.ouyanglol.crawler.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
-import java.time.Duration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -15,6 +14,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.time.Duration;
 
 /**
  * @author Ouyang
@@ -43,7 +44,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     /**
-     * 默认保存30秒
+     * 默认保存30分钟
      * @param factory RedisConnectionFactory
      * @return CacheManager
      */
@@ -55,7 +56,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         GenericFastJsonRedisSerializer jsonRedisSerializer = new GenericFastJsonRedisSerializer();
         //解决查询缓存转换异常的问题
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofDays(30))
+                .entryTtl(Duration.ofMinutes(30))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringRedisSerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonRedisSerializer))
                 .disableCachingNullValues();

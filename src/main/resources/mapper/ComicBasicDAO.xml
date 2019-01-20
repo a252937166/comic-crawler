@@ -35,7 +35,7 @@
       AND `name` LIKE  CONCAT('%',#{name},'%')
     </if>
     <if test="status != null">
-      AND status = #{status,jdbcType=INTEGER},
+      AND status = #{status,jdbcType=INTEGER}
     </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

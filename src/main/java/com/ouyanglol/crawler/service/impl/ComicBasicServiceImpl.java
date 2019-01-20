@@ -8,6 +8,7 @@ import com.ouyanglol.crawler.service.ComicBasicService;
 import com.ouyanglol.crawler.vo.ComicBasicVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,5 +43,11 @@ public class ComicBasicServiceImpl implements ComicBasicService {
     @Override
     public Integer add(ComicBasic comicBasic) {
         return comicBasicDAO.insertSelective(comicBasic);
+    }
+
+    @Override
+    @Cacheable(value = "basicQuery",key = "#basicId")
+    public ComicBasic queryById(Integer basicId) {
+        return comicBasicDAO.selectByPrimaryKey(basicId);
     }
 }

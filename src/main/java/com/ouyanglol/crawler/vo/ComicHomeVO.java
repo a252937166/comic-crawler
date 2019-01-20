@@ -17,6 +17,6 @@ public class ComicHomeVO {
     private String name;
     @ApiModelProperty("详情主页")
     private String url;
-    @ApiModelProperty("爬虫状态")
+    @ApiModelProperty(value = "爬虫状态",example = "1")
     private Integer status;
 }

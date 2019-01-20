@@ -2,6 +2,7 @@ package com.ouyanglol.crawler.dao;
 
 import com.ouyanglol.crawler.model.ComicChapter;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -21,4 +22,11 @@ public interface ComicChapterDAO extends MyBatisBaseDAO<ComicChapter, Integer> {
     List<ComicChapter> queryByNameAndCrawlerStatus(@Param("basicId") Integer basicId, @Param("keyWord") String keyWord, @Param("crawlerStatus") Integer crawlerStatus);
 
 
+    /**
+     * 根据爬虫网址查找章节信息
+     * @param url 网址
+     * @return
+     */
+    @Cacheable(value = "queryChapterByUrl",key = "#url")
+    ComicChapter queryByCrawlerUrl(@Param("url")String url);
 }

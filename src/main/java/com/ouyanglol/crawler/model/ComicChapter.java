@@ -37,4 +37,11 @@ public class ComicChapter {
      */
     private Integer newFlag;
 
+    private String crawlerUrl;
+
+    /**
+     * 1章节 2卷
+     */
+    private Integer type;
+
 }
