@@ -7,8 +7,8 @@ import com.ouyanglol.crawler.model.ComicBasic;
 import com.ouyanglol.crawler.model.ComicChapter;
 import com.ouyanglol.crawler.service.ComicBasicService;
 import com.ouyanglol.crawler.service.ComicChapterService;
+import com.ouyanglol.crawler.util.JsoupUtil;
 import com.ouyanglol.crawler.vo.ComicChapterVO;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +17,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -74,42 +73,39 @@ public class ComicChapterServiceImpl implements ComicChapterService {
         String basicUrl = comicBasic.getCrawlerUrl();
         //获取漫画名
         String comicName = comicBasic.getName();
-        Document doc;
-        try {
-            doc = Jsoup.connect(basicUrl).get();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Document doc = JsoupUtil.getDoc(basicUrl);
+        if (doc != null) {
+            List<Element> list = doc.getElementsByClass("pure-u-1-2 pure-u-lg-1-4");
+            //章节从小到大排序
+            Collections.reverse(list);
+            list.forEach(e -> {
+                Element element = e.child(0);
+                String crawlerUrl = basicUrl + element.attributes().get("href");
+                //查找数据库有无数据
+                if (queryByUrl(crawlerUrl) == null) {
+                    ComicChapter comicChapter = new ComicChapter();
+                    comicChapter.setBasicId(basicId);
+                    //章节名
+                    String chapterName = element.childNode(0).toString();
+                    if (chapterName.endsWith(juan)) {
+                        comicChapter.setType(2);
+                    }
+                    comicChapter.setName(chapterName);
+                    String pattern = comicName + "[\\u4e00-\\u9fa5_a-zA-Z]*([0-9]+)[\\u4e00-\\u9fa5_a-zA-Z]*";
+                    Pattern r = Pattern.compile(pattern);
+                    Matcher m = r.matcher(chapterName);
+                    if (m.find()) {
+                        Integer chapterNo = Integer.valueOf(m.group(1));
+                        comicChapter.setChapterNo(chapterNo);
+                    }
+                    comicChapter.setCrawlerUrl(crawlerUrl);
+                    if (list.indexOf(e) == list.size() - 1) {
+                        comicChapter.setNewFlag(1);
+                    }
+                    add(comicChapter);
+                }
+            });
         }
-        List<Element> list = doc.getElementsByClass("pure-u-1-2 pure-u-lg-1-4");
-        //章节从小到大排序
-        Collections.reverse(list);
-        list.forEach(e -> {
-            Element element = e.child(0);
-            String crawlerUrl = basicUrl+element.attributes().get("href");
-            //查找数据库有无数据
-            if (queryByUrl(crawlerUrl) == null) {
-                ComicChapter comicChapter = new ComicChapter();
-                comicChapter.setBasicId(basicId);
-                //章节名
-                String chapterName = element.childNode(0).toString();
-                if (chapterName.endsWith(juan)) {
-                    comicChapter.setType(2);
-                }
-                comicChapter.setName(chapterName);
-                String pattern = comicName + "[\\u4e00-\\u9fa5_a-zA-Z]*([0-9]+)(卷|章)";
-                Pattern r = Pattern.compile(pattern);
-                Matcher m = r.matcher(chapterName);
-                if (m.find()) {
-                    Integer chapterNo = Integer.valueOf(m.group(1));
-                    comicChapter.setChapterNo(chapterNo);
-                }
-                comicChapter.setCrawlerUrl(crawlerUrl);
-                if (list.indexOf(e) == list.size() - 1) {
-                    comicChapter.setNewFlag(1);
-                }
-                add(comicChapter);
-            }
-        });
     }
 
 
@@ -117,5 +113,11 @@ public class ComicChapterServiceImpl implements ComicChapterService {
     @Override
     public ComicChapter queryByUrl(String url) {
         return comicChapterDAO.queryByCrawlerUrl(url);
+    }
+
+    @Override
+    @Cacheable(value = "queryChapterById",key = "#id")
+    public ComicChapter queryById(Integer id) {
+        return comicChapterDAO.selectByPrimaryKey(id);
     }
 }

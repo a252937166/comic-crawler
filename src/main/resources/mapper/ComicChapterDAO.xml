@@ -32,13 +32,13 @@
       from comic_chapter
       where `status` = 1
       <if test="basicId != null">
-        basic_id = #{basicId,jdbcType=INTEGER}
+        and basic_id = #{basicId,jdbcType=INTEGER}
       </if>
       <if test="keyWord != null">
-        `name` LIKE CONCAT('%',#{keyWord,jdbcType=VARCHAR} ,'%' )
+        and `name` LIKE CONCAT('%',#{keyWord,jdbcType=VARCHAR} ,'%' )
       </if>
       <if test="crawlerStatus != null">
-        crawlerStatus = #{crawlerStatus,jdbcType=INTEGER}
+        and crawler_status = #{crawlerStatus,jdbcType=INTEGER}
       </if>
       union
       select
@@ -46,13 +46,13 @@
       from comic_chapter
       where `status` = 1
       <if test="basicId != null">
-        basic_id = #{basicId,jdbcType=INTEGER}
+        and basic_id = #{basicId,jdbcType=INTEGER}
       </if>
       <if test="keyWord != null">
-        origin_name LIKE CONCAT('%',#{keyWord,jdbcType=VARCHAR} ,'%' )
+        and origin_name LIKE CONCAT('%',#{keyWord,jdbcType=VARCHAR} ,'%' )
       </if>
       <if test="crawlerStatus != null">
-        crawlerStatus = #{crawlerStatus,jdbcType=INTEGER}
+        and crawler_status = #{crawlerStatus,jdbcType=INTEGER}
       </if>
     </select>
     <select id="queryByCrawlerUrl" resultMap="BaseResultMap">

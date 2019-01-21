@@ -11,7 +11,14 @@ import org.jsoup.nodes.TextNode;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -32,13 +39,45 @@ public class MyTest {
     @Autowired
     private ComicBasicService comicBasicService;
 
+    @Test
+    public void test1() {
+        try {
+            getImg("https://manhua.fzdm.com/2/930/","海贼王930话",1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+    }
 
-    private void getImg(String s) throws IOException {
+    private void getImg(String s,String chapterName,Integer pageNo) throws IOException, KeyManagementException, NoSuchAlgorithmException {
         String pattern = "var\\s+mhurl\\s*=\\s*\"(.*?)\";";
         Pattern r = Pattern.compile(pattern);
         String pattern2 = "<a\\s+href=\"(.*?)\"\\s+class=\"pure-button pure-button-primary\">下一页</a>";
         Pattern r2 = Pattern.compile(pattern2);
-        Document doc = Jsoup.connect(s).get();
+
+        SSLContext context = SSLContext.getInstance("TLSv1.2");
+        context.init(null, new X509TrustManager[] { new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+        } }, new SecureRandom());
+
+
+        Document doc = Jsoup.connect(s).sslSocketFactory(context.getSocketFactory()).get();
         String orignUrl = doc.getElementById("readurl").attributes().get("content");
         Matcher m = r.matcher(doc.body().toString());
         if (m.find()) {
@@ -51,15 +90,15 @@ public class MyTest {
             if (mhurl.contains("http")) {
                 mhpicurl = mhurl;
             }
-            String fileName = "海贼王"+mhurl.substring(mhurl.lastIndexOf("/")+1);
+            String fileName = chapterName+"_"+pageNo+mhurl.substring(mhurl.lastIndexOf("."));
             ComicUrl comicUrl = new ComicUrl(fileName,mhpicurl);
             System.out.println(fileName+":"+mhpicurl);
             System.out.println("存入队列.....");
-            producer.sendMsg(comicUrl);
+//            producer.sendMsg(comicUrl);
             Matcher m2 = r2.matcher(doc.body().toString());
             if (m2.find()) {
                 String newUrl = orignUrl + m2.group(1);
-                getImg(newUrl);
+                getImg(newUrl,chapterName,pageNo+1);
             }
         }
     }

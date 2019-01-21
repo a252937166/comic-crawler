@@ -10,16 +10,12 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FetchRet;
 import com.qiniu.util.Auth;
-import org.springframework.beans.factory.annotation.Value;
 
 public class QiniuUtil {
 
-    @Value("${qiniu.ak}")
-    private static String accessKey;
-    @Value("${qiniu.sk}")
-    private static String secretKey;
-    @Value("${qiniu.bucket}")
-    private static String bucket;
+    private static String accessKey="0j0DJNycJ8YTqLlgh22aKM57vfeAnfsuQy8ZrBDP";
+    private static String secretKey="_mj_dSZo93IGCjZ3JpusTNGWDMjfslfgZFWhnNSw";
+    private static String bucket="tencent";
 
     public static String uploadImg(String fileName,byte[] fileBytes) {
         //构造一个带指定Zone对象的配置类

@@ -18,6 +18,10 @@ public class Result<T> {
         this.message = message;
     }
 
+    public static<T> Result<T> success() {
+        return new Result<>(null,ResultStatus.SUCCESS.getStatus().value(),ResultStatus.SUCCESS.getMessage());
+    }
+
     public static<T> Result<T> success(T data) {
         return new Result<>(data,ResultStatus.SUCCESS.getStatus().value(),ResultStatus.SUCCESS.getMessage());
     }

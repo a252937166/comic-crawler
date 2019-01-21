@@ -33,4 +33,11 @@ public interface ComicChapterService {
      */
     ComicChapter queryByUrl(String url);
 
+    /**
+     * 根据id查询
+     * @param id id
+     * @return
+     */
+    ComicChapter queryById(Integer id);
+
 }

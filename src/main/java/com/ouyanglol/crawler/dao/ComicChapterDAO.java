@@ -27,6 +27,6 @@ public interface ComicChapterDAO extends MyBatisBaseDAO<ComicChapter, Integer> {
      * @param url 网址
      * @return
      */
-    @Cacheable(value = "queryChapterByUrl",key = "#url")
+    @Cacheable(value = "queryChapterByUrl",key = "#url",unless = "#result==null")
     ComicChapter queryByCrawlerUrl(@Param("url")String url);
 }
