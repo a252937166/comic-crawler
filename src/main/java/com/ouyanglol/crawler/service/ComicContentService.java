@@ -1,6 +1,7 @@
 package com.ouyanglol.crawler.service;
 
 import com.ouyanglol.crawler.model.ComicContent;
+import io.swagger.models.auth.In;
 
 /**
  * @author dnouyang
@@ -14,4 +15,8 @@ public interface ComicContentService {
      * @param chapterId
      */
     void crawl(Integer chapterId);
+
+    Integer update(ComicContent comicContent);
+
+    ComicContent queryById(Integer id);
 }

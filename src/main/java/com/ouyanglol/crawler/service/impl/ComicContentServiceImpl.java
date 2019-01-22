@@ -2,6 +2,7 @@ package com.ouyanglol.crawler.service.impl;
 
 import com.ouyanglol.crawler.config.mq.MqComicProducer;
 import com.ouyanglol.crawler.dao.ComicContentDAO;
+import com.ouyanglol.crawler.entity.ComicUrl;
 import com.ouyanglol.crawler.model.ComicChapter;
 import com.ouyanglol.crawler.model.ComicContent;
 import com.ouyanglol.crawler.service.ComicChapterService;
@@ -10,6 +11,8 @@ import com.ouyanglol.crawler.util.JsoupUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -48,6 +51,19 @@ public class ComicContentServiceImpl implements ComicContentService {
         getImg(chapterUrl,chapterId,comicChapter.getName(),1);
     }
 
+    @Override
+    @CacheEvict(value = "queryComicContentById",key = "#id")
+    public Integer update(ComicContent comicContent) {
+        comicContent.setUpdateDate(new Date());
+        return comicContentDAO.updateByPrimaryKeySelective(comicContent);
+    }
+
+    @Override
+    @Cacheable(value = "queryComicContentById",key = "#id")
+    public ComicContent queryById(Integer id) {
+        return comicContentDAO.selectByPrimaryKey(id);
+    }
+
     private void getImg(String url,Integer chapterId,String chapterName,Integer pageNo) {
         String pattern = "var\\s+mhurl\\s*=\\s*\"(.*?)\";";
         Pattern r = Pattern.compile(pattern);
@@ -78,13 +94,20 @@ public class ComicContentServiceImpl implements ComicContentService {
                 comicContent.setFileName(fileName);
                 comicContent.setOriginalUrl(mhpicurl);
                 comicContent.setPageNo(pageNo);
+                Integer contentId= add(comicContent);
+                ComicUrl comicUrl = new ComicUrl(contentId.toString(),fileName,mhpicurl);
                 log.info(fileName+":"+mhpicurl);
                 log.info("存入队列.....");
-                producer.sendMsg(comicContent);
+                producer.sendMsg(comicUrl);
                 Matcher m2 = r2.matcher(doc.body().toString());
                 if (m2.find()) {
                     String newUrl = orignUrl + m2.group(1);
                     getImg(newUrl,chapterId,chapterName,pageNo+1);
+                } else {
+                    ComicChapter comicChapter = new ComicChapter();
+                    comicChapter.setId(chapterId);
+                    comicChapter.setPages(pageNo);
+                    comicChapterService.update(comicChapter);
                 }
             }
         }

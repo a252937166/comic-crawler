@@ -1,14 +1,17 @@
 package com.ouyanglol.crawler.service.impl;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ouyanglol.crawler.dao.ComicChapterDAO;
+import com.ouyanglol.crawler.dao.ComicContentDAO;
 import com.ouyanglol.crawler.model.ComicBasic;
 import com.ouyanglol.crawler.model.ComicChapter;
 import com.ouyanglol.crawler.service.ComicBasicService;
 import com.ouyanglol.crawler.service.ComicChapterService;
 import com.ouyanglol.crawler.util.JsoupUtil;
 import com.ouyanglol.crawler.vo.ComicChapterVO;
+import io.swagger.models.auth.In;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +38,8 @@ public class ComicChapterServiceImpl implements ComicChapterService {
     private ComicChapterDAO comicChapterDAO;
     @Autowired
     private ComicBasicService comicBasicService;
+    @Autowired
+    private ComicContentDAO comicContentDAO;
 
     private final String juan = "卷";
 
@@ -116,8 +121,30 @@ public class ComicChapterServiceImpl implements ComicChapterService {
     }
 
     @Override
-    @Cacheable(value = "queryChapterById",key = "#id")
+    @Cacheable(value = "queryChapterById",key = "#id",unless = "#result == null")
     public ComicChapter queryById(Integer id) {
         return comicChapterDAO.selectByPrimaryKey(id);
+    }
+
+    @Override
+    @CacheEvict(value = {"queryChapterById","chapterPage"},allEntries = true)
+    public Integer update(ComicChapter comicChapter) {
+        comicChapter.setUpdateDate(new Date());
+        return comicChapterDAO.updateByPrimaryKeySelective(comicChapter);
+    }
+
+    @Override
+    public Integer checkCrawlerStatus(Integer id) {
+        ComicChapter comicChapter = queryById(id);
+        if (comicChapter.getCrawlerStatus().equals(1)) {
+            return 1;
+        }
+        Integer pagesNum = comicContentDAO.selectCrawledNumByChapterId(id);
+        if (pagesNum.equals(comicChapter.getPages())) {
+            comicChapter.setCrawlerStatus(1);
+            comicChapterDAO.updateByPrimaryKeySelective(comicChapter);
+            return 1;
+        }
+        return 0;
     }
 }

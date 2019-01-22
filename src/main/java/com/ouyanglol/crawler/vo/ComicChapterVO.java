@@ -42,4 +42,7 @@ public class ComicChapterVO {
 
     @ApiModelProperty(value = "是否有章节更新",example = "1")
     private Integer newFlag;
+
+    @ApiModelProperty(value = "页数",example = "1")
+    private Integer pages;
 }

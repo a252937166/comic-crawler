@@ -8,10 +8,12 @@ import lombok.Data;
  */
 @Data
 public class ComicUrl {
-    public ComicUrl(String name, String url) {
+    public ComicUrl(String id,String name, String url) {
+        this.id = id;
         this.name = name;
         this.url = url;
     }
+    private String id;
     private String name;
     private String url;
 }

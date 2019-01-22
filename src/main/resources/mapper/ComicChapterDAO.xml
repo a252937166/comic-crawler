@@ -14,10 +14,11 @@
     <result column="new_flag" jdbcType="INTEGER" property="newFlag" />
     <result column="crawler_url" jdbcType="VARCHAR" property="crawlerUrl" />
     <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="pages" jdbcType="INTEGER" property="pages" />
   </resultMap>
   <sql id="Base_Column_List">
     id, basic_id, `name`, chapter_no, `status`, origin_name, create_date, update_date, 
-    crawler_status, new_flag, crawler_url, `type`
+    crawler_status, new_flag, crawler_url, `type`, pages
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -70,11 +71,11 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicChapter" useGeneratedKeys="true">
     insert into comic_chapter (basic_id, `name`, chapter_no, 
       `status`, origin_name, create_date, 
-      update_date, crawler_status, new_flag, crawler_url,`type`
+      update_date, crawler_status, new_flag, crawler_url,`type`,pages
       )
     values (#{basicId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{chapterNo,jdbcType=INTEGER}, 
       #{status,jdbcType=INTEGER}, #{originName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{updateDate,jdbcType=TIMESTAMP}, #{crawlerStatus,jdbcType=INTEGER}, #{newFlag,jdbcType=INTEGER}, #{crawlerUrl,jdbcType=VARCHAR},#{type,jdbcType=INTEGER}
+      #{updateDate,jdbcType=TIMESTAMP}, #{crawlerStatus,jdbcType=INTEGER}, #{newFlag,jdbcType=INTEGER}, #{crawlerUrl,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{pages,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicChapter" useGeneratedKeys="true">
@@ -113,6 +114,9 @@
       <if test="type != null">
         `type`,
       </if>
+      <if test="pages != null">
+        pages,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="basicId != null">
@@ -147,6 +151,9 @@
       </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},
+      </if>
+      <if test="pages != null">
+        #{pages,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -186,6 +193,9 @@
       <if test="type != null">
         `type` = #{type,jdbcType=INTEGER},
       </if>
+      <if test="pages != null">
+        `type` = #{pages,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -201,7 +211,8 @@
       crawler_status = #{crawlerStatus,jdbcType=INTEGER},
       new_flag = #{newFlag,jdbcType=INTEGER},
       crawler_url = #{crawlerUrl,jdbcType=VARCHAR},
-      `type` = #{type,jdbcType=INTEGER}
+      `type` = #{type,jdbcType=INTEGER},
+      pages = #{pages,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

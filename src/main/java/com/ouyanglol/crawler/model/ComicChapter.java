@@ -44,4 +44,6 @@ public class ComicChapter {
      */
     private Integer type;
 
+    private Integer pages;
+
 }

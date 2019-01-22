@@ -91,7 +91,7 @@ public class MyTest {
                 mhpicurl = mhurl;
             }
             String fileName = chapterName+"_"+pageNo+mhurl.substring(mhurl.lastIndexOf("."));
-            ComicUrl comicUrl = new ComicUrl(fileName,mhpicurl);
+            ComicUrl comicUrl = new ComicUrl("1",fileName,mhpicurl);
             System.out.println(fileName+":"+mhpicurl);
             System.out.println("存入队列.....");
 //            producer.sendMsg(comicUrl);

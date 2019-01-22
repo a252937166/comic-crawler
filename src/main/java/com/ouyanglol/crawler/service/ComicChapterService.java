@@ -40,4 +40,18 @@ public interface ComicChapterService {
      */
     ComicChapter queryById(Integer id);
 
+    /**
+     * 更新
+     * @param comicChapter
+     * @return
+     */
+    Integer update(ComicChapter comicChapter);
+
+    /**
+     * 根据id查询该章节爬虫状态
+     * @param id
+     * @return
+     */
+    Integer checkCrawlerStatus(Integer id);
+
 }

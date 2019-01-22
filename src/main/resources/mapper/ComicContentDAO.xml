@@ -22,6 +22,12 @@
     from comic_content
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectCrawledNumByChapterId" resultType="java.lang.Integer">
+    select count(1)
+    from comic_content
+    where chapter_id = #{chapterId}
+    and img_url IS NOT NULL
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from comic_content
     where id = #{id,jdbcType=INTEGER}
