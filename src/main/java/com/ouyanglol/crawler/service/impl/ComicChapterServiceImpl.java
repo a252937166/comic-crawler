@@ -1,6 +1,5 @@
 package com.ouyanglol.crawler.service.impl;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ouyanglol.crawler.dao.ComicChapterDAO;
@@ -11,7 +10,6 @@ import com.ouyanglol.crawler.service.ComicBasicService;
 import com.ouyanglol.crawler.service.ComicChapterService;
 import com.ouyanglol.crawler.util.JsoupUtil;
 import com.ouyanglol.crawler.vo.ComicChapterVO;
-import io.swagger.models.auth.In;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.BeanUtils;
@@ -142,7 +140,7 @@ public class ComicChapterServiceImpl implements ComicChapterService {
         Integer pagesNum = comicContentDAO.selectCrawledNumByChapterId(id);
         if (pagesNum.equals(comicChapter.getPages())) {
             comicChapter.setCrawlerStatus(1);
-            comicChapterDAO.updateByPrimaryKeySelective(comicChapter);
+            update(comicChapter);
             return 1;
         }
         return 0;

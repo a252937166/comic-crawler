@@ -31,18 +31,17 @@ public class MqComicConsumer extends AbstractMQPushConsumer {
             Integer id = Integer.valueOf((String) ((LinkedTreeMap) message).get("id"));
             String fileName = (String) ((LinkedTreeMap) message).get("name");
             String imgUrl = (String) ((LinkedTreeMap) message).get("url");
-            System.out.println("开始上传:"+fileName);
+            log.info("{}:开始上传",fileName);
             QiniuUtil.uploadImg(imgUrl,fileName);
             ComicContent comicContent = new ComicContent();
             comicContent.setId(id);
             comicContent.setStatus(1);
             comicContent.setImgUrl("https://qiniu.ouyanglol.com/"+fileName);
             comicContentService.update(comicContent);
-            System.out.println(fileName+":上传完毕");
+            log.info("{}:上传完毕",fileName);
             comicContent = comicContentService.queryById(id);
             Integer chapterId = comicContent.getChapterId();
             comicChapterService.checkCrawlerStatus(chapterId);
-
         }
         return true;
     }

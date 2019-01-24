@@ -52,7 +52,7 @@ public class ComicContentServiceImpl implements ComicContentService {
     }
 
     @Override
-    @CacheEvict(value = "queryComicContentById",key = "#id")
+    @CacheEvict(value = "queryComicContentById",key = "#comicContent.id")
     public Integer update(ComicContent comicContent) {
         comicContent.setUpdateDate(new Date());
         return comicContentDAO.updateByPrimaryKeySelective(comicContent);
