@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("crawler/comicChapter")
-@Api(tags = "爬虫")
+@Api(tags = "章节")
 public class ComicChapterController {
 
     @Autowired
@@ -37,12 +37,12 @@ public class ComicChapterController {
     @ApiOperation("新增漫画章节")
     public Result<Integer> page(@RequestBody  ComicChapterAddRequest request) {
         ComicChapter comicChapter = new ComicChapter();
-//        comicChapter.setBasicId(request.getBasicId());
-//        comicChapter.setName(request.getName());
-//        comicChapter.setOriginName(request.getOriginName());
-//        comicChapter.setCrawlerUrl(request.getCrawlerUrl());
-//        comicChapter.setChapterNo(request.getChapterNo());
-//        comicChapter.setNewFlag(request.getNewFlag());
+        comicChapter.setBasicId(request.getBasicId());
+        comicChapter.setName(request.getName());
+        comicChapter.setOriginName(request.getOriginName());
+        comicChapter.setCrawlerUrl(request.getCrawlerUrl());
+        comicChapter.setChapterNo(request.getChapterNo());
+        comicChapter.setNewFlag(request.getNewFlag());
         Integer result = comicChapterService.add(comicChapter);
         if (result > 1) {
             return Result.success(result);

@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("crawler/comicBasic")
-@Api(tags = "爬虫")
+@Api(tags = "basic")
 public class ComicBasicController {
 
     @Autowired
     private ComicBasicService comicBasicService;
 
     @GetMapping("page")
-    @ApiOperation("分页获取漫画详情")
+    @ApiOperation("分页获取basic详情")
     public Result<PageInfo<ComicBasicVO>> page(ComicHomePageRequest request) {
         PageInfo<ComicBasicVO> pageInfo = comicBasicService.getPage(request.getPage(),request.getPageSize(),request.getName(),request.getStatus());
         return Result.success(pageInfo);

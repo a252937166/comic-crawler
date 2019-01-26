@@ -194,7 +194,7 @@
         `type` = #{type,jdbcType=INTEGER},
       </if>
       <if test="pages != null">
-        `type` = #{pages,jdbcType=INTEGER},
+        `pages` = #{pages,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

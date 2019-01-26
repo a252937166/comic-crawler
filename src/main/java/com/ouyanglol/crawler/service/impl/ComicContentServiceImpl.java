@@ -1,5 +1,7 @@
 package com.ouyanglol.crawler.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ouyanglol.crawler.config.mq.MqComicProducer;
 import com.ouyanglol.crawler.dao.ComicContentDAO;
 import com.ouyanglol.crawler.entity.ComicUrl;
@@ -8,14 +10,18 @@ import com.ouyanglol.crawler.model.ComicContent;
 import com.ouyanglol.crawler.service.ComicChapterService;
 import com.ouyanglol.crawler.service.ComicContentService;
 import com.ouyanglol.crawler.util.JsoupUtil;
+import com.ouyanglol.crawler.vo.ComicContentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +68,24 @@ public class ComicContentServiceImpl implements ComicContentService {
     @Cacheable(value = "queryComicContentById",key = "#id")
     public ComicContent queryById(Integer id) {
         return comicContentDAO.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public PageInfo<ComicContentVO> getPage(Integer chapterId, Integer pageNo, Integer pageSize) {
+        PageHelper.startPage(pageNo,pageSize);
+        ComicContent content = new ComicContent();
+        content.setChapterId(chapterId);
+        List<ComicContent> list = comicContentDAO.queryBySelective(content);
+        List<ComicContentVO> voList = new ArrayList<>();
+        list.forEach(comicContent -> {
+            ComicContentVO vo = new ComicContentVO();
+            BeanUtils.copyProperties(comicContent,vo);
+            voList.add(vo);
+
+        });
+        PageInfo pageInfo = new PageInfo<>(list);
+        pageInfo.setList(voList);
+        return pageInfo;
     }
 
     private void getImg(String url,Integer chapterId,String chapterName,Integer pageNo) {

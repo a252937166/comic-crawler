@@ -1,7 +1,8 @@
 package com.ouyanglol.crawler.service;
 
+import com.github.pagehelper.PageInfo;
 import com.ouyanglol.crawler.model.ComicContent;
-import io.swagger.models.auth.In;
+import com.ouyanglol.crawler.vo.ComicContentVO;
 
 /**
  * @author dnouyang
@@ -16,7 +17,22 @@ public interface ComicContentService {
      */
     void crawl(Integer chapterId);
 
+    /**
+     * 更新
+     * @param comicContent 实体
+     * @return
+     */
     Integer update(ComicContent comicContent);
 
     ComicContent queryById(Integer id);
+
+    /**
+     * 分页获取漫画内容
+     *
+     * @param pageSize 分页大小
+     * @param page 当前页数
+     * @param chapterId 章节id
+     * @return
+     */
+    PageInfo<ComicContentVO> getPage(Integer chapterId, Integer page, Integer pageSize);
 }

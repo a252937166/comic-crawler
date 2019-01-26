@@ -137,7 +137,7 @@ public class ComicChapterServiceImpl implements ComicChapterService {
         if (comicChapter.getCrawlerStatus().equals(1)) {
             return 1;
         }
-        Integer pagesNum = comicContentDAO.selectCrawledNumByChapterId(id);
+        Integer pagesNum = comicContentDAO.countCrawledNumByChapterId(id);
         if (pagesNum.equals(comicChapter.getPages())) {
             comicChapter.setCrawlerStatus(1);
             update(comicChapter);
