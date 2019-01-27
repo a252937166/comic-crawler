@@ -22,7 +22,7 @@ public class ComicContent {
 
     private Date updateDate;
 
-    private Integer status;
+    private Integer crawlerStatus;
 
     private String fileName;
 

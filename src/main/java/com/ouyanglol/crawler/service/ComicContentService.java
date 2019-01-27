@@ -35,4 +35,11 @@ public interface ComicContentService {
      * @return
      */
     PageInfo<ComicContentVO> getPage(Integer chapterId, Integer page, Integer pageSize);
+
+    /**
+     * 根据id获取图片私有连接
+     * @param id 文件id
+     * @return
+     */
+    String getSecretUrl(Integer id);
 }

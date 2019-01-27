@@ -35,8 +35,7 @@ public class MqComicConsumer extends AbstractMQPushConsumer {
             QiniuUtil.uploadImg(imgUrl,fileName);
             ComicContent comicContent = new ComicContent();
             comicContent.setId(id);
-            comicContent.setStatus(1);
-            comicContent.setImgUrl("https://qiniu.ouyanglol.com/"+fileName);
+            comicContent.setCrawlerStatus(1);
             comicContentService.update(comicContent);
             log.info("{}:上传完毕",fileName);
             comicContent = comicContentService.queryById(id);

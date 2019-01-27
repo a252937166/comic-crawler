@@ -10,6 +10,8 @@ import lombok.Data;
 @ApiModel("漫画内容")
 public class ComicContentVO {
 
+    private Integer id;
+
     private Integer chapterId;
 
     private String imgUrl;

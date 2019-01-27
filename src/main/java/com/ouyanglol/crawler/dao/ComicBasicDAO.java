@@ -17,5 +17,5 @@ public interface ComicBasicDAO extends MyBatisBaseDAO<ComicBasic, Integer> {
      * @param status
      * @return
      */
-    List<ComicBasic> queryByNameAndStatus(@Param("name") String name, @Param("status") Integer status);
+    List<ComicBasic> queryByNameAndStatus(@Param("name") String name, @Param("crawlerStatus") Integer status);
 }

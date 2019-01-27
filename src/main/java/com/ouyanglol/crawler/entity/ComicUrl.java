@@ -1,5 +1,6 @@
 package com.ouyanglol.crawler.entity;
 
+import com.maihaoche.starter.mq.annotation.MQKey;
 import lombok.Data;
 
 /**
@@ -13,6 +14,7 @@ public class ComicUrl {
         this.name = name;
         this.url = url;
     }
+    @MQKey
     private String id;
     private String name;
     private String url;

@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 /**
  * @author dnouyang
  */
@@ -36,5 +38,11 @@ public class ComicContentController {
         return Result.success(pageInfo);
     }
 
+    @GetMapping("{id}")
+    @ApiOperation("根据id获取私有空间地址")
+    public Result<String> page(@PathVariable("id") Integer id) {
+        String url =  comicContentService.getSecretUrl(id);
+        return Result.success(url);
+    }
 
 }

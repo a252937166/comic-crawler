@@ -8,12 +8,12 @@
     <result column="page_no" jdbcType="INTEGER" property="pageNo" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="crawler_status" jdbcType="INTEGER" property="crawlerStatus" />
     <result column="file_name" jdbcType="VARCHAR" property="fileName" />
     <result column="original_url" jdbcType="VARCHAR" property="originalUrl" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, chapter_id, img_url, page_no, create_date, update_date, `status`, file_name, 
+    id, chapter_id, img_url, page_no, create_date, update_date, crawler_status, file_name,
     original_url
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -26,7 +26,7 @@
     select count(1)
     from comic_content
     where chapter_id = #{chapterId}
-    and img_url IS NOT NULL
+    and crawler_status = 1
   </select>
   <select id="queryBySelective" resultMap="BaseResultMap">
     select
@@ -48,8 +48,8 @@
     <if test="updateDate != null">
       and #{updateDate,jdbcType=TIMESTAMP}
     </if>
-    <if test="status != null">
-      and #{status,jdbcType=INTEGER}
+    <if test="crawlerStatus != null">
+      and #{crawlerStatus,jdbcType=INTEGER}
     </if>
     <if test="fileName != null">
       and #{fileName,jdbcType=VARCHAR}
@@ -64,10 +64,10 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicContent" useGeneratedKeys="true">
     insert into comic_content (chapter_id, img_url, page_no, 
-      create_date, update_date, `status`, 
+      create_date, update_date, crawler_status,
       file_name, original_url)
     values (#{chapterId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{pageNo,jdbcType=INTEGER}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{crawlerStatus,jdbcType=INTEGER},
       #{fileName,jdbcType=VARCHAR}, #{originalUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ouyanglol.crawler.model.ComicContent" useGeneratedKeys="true">
@@ -88,8 +88,8 @@
       <if test="updateDate != null">
         update_date,
       </if>
-      <if test="status != null">
-        `status`,
+      <if test="crawlerStatus != null">
+        crawler_status,
       </if>
       <if test="fileName != null">
         file_name,
@@ -114,8 +114,8 @@
       <if test="updateDate != null">
         #{updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
+      <if test="crawlerStatus != null">
+        #{crawlerStatus,jdbcType=INTEGER},
       </if>
       <if test="fileName != null">
         #{fileName,jdbcType=VARCHAR},
@@ -143,8 +143,8 @@
       <if test="updateDate != null">
         update_date = #{updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=INTEGER},
+      <if test="crawlerStatus != null">
+        crawler_status = #{crawlerStatus,jdbcType=INTEGER},
       </if>
       <if test="fileName != null">
         file_name = #{fileName,jdbcType=VARCHAR},
@@ -162,7 +162,7 @@
       page_no = #{pageNo,jdbcType=INTEGER},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      `status` = #{status,jdbcType=INTEGER},
+      crawler_status = #{crawlerStatus,jdbcType=INTEGER},
       file_name = #{fileName,jdbcType=VARCHAR},
       original_url = #{originalUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

@@ -10,6 +10,7 @@ import com.ouyanglol.crawler.model.ComicContent;
 import com.ouyanglol.crawler.service.ComicChapterService;
 import com.ouyanglol.crawler.service.ComicContentService;
 import com.ouyanglol.crawler.util.JsoupUtil;
+import com.ouyanglol.crawler.util.QiniuUtil;
 import com.ouyanglol.crawler.vo.ComicContentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
@@ -18,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -75,6 +78,7 @@ public class ComicContentServiceImpl implements ComicContentService {
         PageHelper.startPage(pageNo,pageSize);
         ComicContent content = new ComicContent();
         content.setChapterId(chapterId);
+        content.setCrawlerStatus(1);
         List<ComicContent> list = comicContentDAO.queryBySelective(content);
         List<ComicContentVO> voList = new ArrayList<>();
         list.forEach(comicContent -> {
@@ -86,6 +90,28 @@ public class ComicContentServiceImpl implements ComicContentService {
         PageInfo pageInfo = new PageInfo<>(list);
         pageInfo.setList(voList);
         return pageInfo;
+    }
+
+    @Override
+    public String getSecretUrl(Integer id) {
+        ComicContent comicContent = comicContentDAO.selectByPrimaryKey(id);
+        if (comicContent.getUpdateDate() == null) {
+            String url = QiniuUtil.getUrl(comicContent.getFileName());
+            comicContent.setImgUrl(url);
+            update(comicContent);
+            return url;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(comicContent.getUpdateDate());
+        calendar.add(Calendar.MINUTE,65);
+        if (System.currentTimeMillis() > calendar.getTimeInMillis() || !StringUtils.isEmpty(comicContent.getImgUrl())) {
+            return comicContent.getImgUrl();
+        } else {
+            String url = QiniuUtil.getUrl(comicContent.getFileName());
+            comicContent.setImgUrl(url);
+            update(comicContent);
+            return url;
+        }
     }
 
     private void getImg(String url,Integer chapterId,String chapterName,Integer pageNo) {
